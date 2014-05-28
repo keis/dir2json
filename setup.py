@@ -8,7 +8,7 @@ setup(
     author_email='keijser@gmail.com',
     description='creates a json tree from a directory structure',
     license='MIT',
-    extras_require={'tests': ['PyHamcrest']},
+    extras_require={'tests': ['PyHamcrest', 'pep8']},
     entry_points={
         'console_scripts': [
             'dir2json = dir2json:main'
