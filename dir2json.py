@@ -18,10 +18,10 @@ def create_index(path, scanner):
         data = {
             'path': p[plen:],
             'type': 'directory',
-            'index': []
+            'children': []
         }
         # Add index to lookup with full path
-        lookup[p] = data['index']
+        lookup[p] = data['children']
         return data
 
     def file(p):
@@ -29,6 +29,7 @@ def create_index(path, scanner):
 
         data = {
             'path': p[plen:],
+            'text': os.path.basename(p),
             'type': mime or 'unknown'
         }
 
@@ -43,7 +44,11 @@ def create_index(path, scanner):
 
         return data
 
-    tree = directory(path)
+    tree = {
+        'data': [],
+        'type': 'directory'
+    }
+    lookup[path] = tree['data']
 
     for root, dirs, files in scanner:
         index = lookup.pop(root)
