@@ -5,6 +5,8 @@ import os
 import sys
 import mimetypes
 
+__all__ = ('create_index', 'scan_directory')
+
 PRETTY_JSON = {'indent': 4}
 
 
@@ -53,7 +55,7 @@ def create_index(path, scanner):
 
         for f in files:
             index.append(file(os.path.join(root, f)))
-            
+
     return tree
 
 
@@ -62,19 +64,19 @@ def nodot(l):
     return [x for x in l if not x.startswith('.')]
 
 
+def nodotwalk(path):
+    for root, dirs, files in os.walk(path):
+        dirs[:] = nodot(dirs)
+        files = nodot(files)
+        yield (root, dirs, files)
+
+
 def scan_directory(path, all=False):
     '''Wrapper around os.walk that optionally filters hidden directories
        and files
     '''
 
-    walk = os.walk(path)
-    if all:
-        yield from walk
-    else:
-        for root, dirs, files in os.walk(path):
-            dirs[:] = nodot(dirs)
-            files = nodot(files)
-            yield (root, dirs, files)
+    return os.walk(path) if all else nodotwalk(path)
 
 
 def main():
